@@ -492,7 +492,12 @@ public class InMobiMediationAdapter
         {
             extras.put( "coppa", isAgeRestrictedUser ? "1" : "0" );
         }
-
+        if (AppLovinSdk.VERSION_CODE >= 91100 ) {
+            Boolean isDoNotSell = getPrivacySetting("isDoNotSell", parameters);
+            if (isDoNotSell != null) {
+                extras.put("do_not_sell", isDoNotSell ? "1" : "0")
+            }
+        }
         return extras;
     }
 
