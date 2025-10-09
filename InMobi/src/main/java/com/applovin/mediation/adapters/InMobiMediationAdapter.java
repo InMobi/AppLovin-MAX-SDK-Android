@@ -226,6 +226,8 @@ public class InMobiMediationAdapter
             log( "InMobi SDK not successfully initialized: failing " + adFormat.getLabel() + " ad load..." );
             listener.onAdViewAdLoadFailed( MaxAdapterError.NOT_INITIALIZED );
 
+
+            
             return;
         }
 
