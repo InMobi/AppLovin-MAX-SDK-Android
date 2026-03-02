@@ -98,6 +98,7 @@ public class InMobiMediationAdapter
     private InMobiInterstitial rewardedAd;
     private InMobiNative       nativeAd;
 
+
     // Explicit default constructor declaration
     public InMobiMediationAdapter(final AppLovinSdk sdk) { super( sdk ); }
 
@@ -262,7 +263,8 @@ public class InMobiMediationAdapter
             int height;
             if ( isAdaptiveBanner && isAdaptiveAdViewFormat( adFormat, parameters ) )
             {
-                AppLovinSdkUtils.Size adaptiveSize = getAdaptiveAdViewSize(adFormat, parameters, context);
+                AppLovinSdkUtils.Size adaptiveSize;
+                adaptiveSize = getAdaptiveAdViewSize( adFormat, parameters, context );
                 width = adaptiveSize.getWidth();
                 height = adaptiveSize.getHeight();
 
@@ -513,7 +515,7 @@ public class InMobiMediationAdapter
                                               final Context context,
                                               final Map<String, String> extras)
     {
-        AppLovinSdkUtils.Size adaptiveSize = getAdaptiveAdViewSize(adFormat, parameters, context);
+        AppLovinSdkUtils.Size adaptiveSize = getAdaptiveAdViewSize( adFormat, parameters, context );
         extras.put( "adWidth", String.valueOf( adaptiveSize.getWidth() ) );
         extras.put( "adHeight", String.valueOf( adaptiveSize.getHeight() ) );
     }
@@ -560,11 +562,13 @@ public class InMobiMediationAdapter
             }
             //Fallback case
             final DisplayMetrics displayProperties = getDisplayProperties( context );
-            //ToDo - handle error appropriately
-            if (displayProperties == null) {
-                throw new IllegalStateException("Unable to retrieve display properties");
+            if ( displayProperties != null )
+            {
+                return AppLovinSdkUtils.pxToDp( context, displayProperties.heightPixels );
             }
-            return AppLovinSdkUtils.pxToDp(context, displayProperties.heightPixels);
+
+            // If display metrics are unavailable, fall back to anchored adaptive height to avoid crashes.
+            return adFormat.getAdaptiveSize( adWidthDp, context ).getHeight();
 
         }
 
